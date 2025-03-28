@@ -35,27 +35,56 @@ public class GFG {
 
 class Solution {
     static int knapsack(int W, int val[], int wt[]) {
-        // code here
+        // ITERATIVE APPROACH
+        
+        
         int n = val.length;
         int[][] dp = new int[n][W+1];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j <= W; j++) {
-                dp[i][j] = -1;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<=W; j++){
+                if(j == 0){
+                    dp[i][j] = 0;
+                }
+                else if(i == 0){
+                    if(j-wt[i] >= 0){
+                        dp[i][j] = val[i];
+                    }
+                }
+                else{
+                    dp[i][j] = dp[i-1][j];
+                    if(j-wt[i]>=0){
+                       dp[i][j] = Math.max(dp[i][j] ,dp[i-1][j-wt[i]] +val[i]);
+                   }
+
+                    // dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-wt[i]] + val[i]);
+                }
             }
         }
-        return helperdon(val, wt, n-1, dp, W);
-    }
-    static int helperdon(int[] val, int[] wt, int i, int[][] dp, int k){
-        if(i<0 || k==0) return 0;
-        if(dp[i][k] != -1) return dp[i][k];
+        return dp[n-1][W];
         
-        int x = helperdon(val, wt, i-1, dp, k);         //exclude
-        int y = 0;
-        if(k >= wt[i]){
-            y = helperdon(val, wt, i-1, dp, k-wt[i]) + val[i];      //include
-        }
         
-        dp[i][k] = Math.max(x, y);
-        return Math.max(x, y);
+        // RECURSIVE APPROACH
+        
+    //     int n = val.length;
+    //     int[][] dp = new int[n][W+1];
+    //     for (int i = 0; i < n; i++) {
+    //         for (int j = 0; j <= W; j++) {
+    //             dp[i][j] = -1;
+    //         }
+    //     }
+    //     return helperdon(val, wt, n-1, dp, W);
+    // }
+    // static int helperdon(int[] val, int[] wt, int i, int[][] dp, int k){
+    //     if(i<0 || k==0) return 0;
+    //     if(dp[i][k] != -1) return dp[i][k];
+        
+    //     int x = helperdon(val, wt, i-1, dp, k);         //exclude
+    //     int y = 0;
+    //     if(k >= wt[i]){
+    //         y = helperdon(val, wt, i-1, dp, k-wt[i]) + val[i];      //include
+    //     }
+        
+    //     dp[i][k] = Math.max(x, y);
+    //     return Math.max(x, y);
     }
 }
